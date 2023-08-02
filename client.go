@@ -18,6 +18,9 @@ const url = "https://%s.incidentiq.com/api/v1.0%s"
 
 var client = &http.Client{Timeout: 10 * time.Second}
 
+// The request in the function uses the POST method but we do
+// not provide a body to show that we are not expecting changes
+// to the endpoint. It is how the API works *eye roll*
 func (iiq IncidentIQ) doGet(endpoint string, model interface{}) error {
 	url := fmt.Sprintf(url, iiq.Domain, endpoint)
 
