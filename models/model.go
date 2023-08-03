@@ -6,7 +6,7 @@ type Model struct {
 	Scope                  string       `json:"Scope,omitempty"`
 	Name                   string       `json:"Name,omitempty"`
 	ModelName              string       `json:"ModelName,omitempty"`
-	IsEnabled              string       `json:"IsEnabled,omitempty"`
+	IsEnabled              bool         `json:"IsEnabled,omitempty"`
 	AssetTypeID            string       `json:"AssetTypeId,omitempty"`
 	AssetTypeName          string       `json:"AssetTypeName,omitempty"`
 	ManufacturerID         string       `json:"ManufacturerId,omitempty"`
@@ -23,12 +23,12 @@ type Model struct {
 type Manufacturer struct {
 	ManufacturerID   string `json:"ManufacturerId,omitempty"`
 	Name             string `json:"Name,omitempty"`
-	IsEnabled        string `json:"IsEnabled,omitempty"`
+	IsEnabled        bool   `json:"IsEnabled,omitempty"`
 	LogoID           string `json:"LogoId,omitempty"`
 	Icon             string `json:"Icon,omitempty"`
-	TotalModels      string `json:"TotalModels,omitempty"`
-	AvailableModels  string `json:"AvailableModels,omitempty"`
-	IncludeAllModels string `json:"IncludeAllModels,omitempty"`
+	TotalModels      int    `json:"TotalModels,omitempty"`
+	AvailableModels  int    `json:"AvailableModels,omitempty"`
+	IncludeAllModels bool   `json:"IncludeAllModels,omitempty"`
 }
 
 type Category struct {
@@ -36,8 +36,8 @@ type Category struct {
 	Scope                          string                           `json:"Scope,omitempty"`
 	ProductID                      string                           `json:"ProductId,omitempty"`
 	CategoryID                     string                           `json:"CategoryId,omitempty"`
-	Level                          string                           `json:"Level,omitempty"`
-	SortOrder                      string                           `json:"SortOrder,omitempty"`
+	Level                          int                              `json:"Level,omitempty"`
+	SortOrder                      int                              `json:"SortOrder,omitempty"`
 	ParentCategoryID               string                           `json:"ParentCategoryId,omitempty"`
 	ParentCategoryName             string                           `json:"ParentCategoryName,omitempty"`
 	CategoryTypeID                 string                           `json:"CategoryTypeId,omitempty"`
@@ -46,7 +46,7 @@ type Category struct {
 	Description                    string                           `json:"Description,omitempty"`
 	ImageID                        string                           `json:"ImageId,omitempty"`
 	Icon                           string                           `json:"Icon,omitempty"`
-	ModelsCount                    string                           `json:"ModelsCount,omitempty"`
+	ModelsCount                    int                              `json:"ModelsCount,omitempty"`
 	CategoryIssues                 []string                         `json:"CategoryIssues,omitempty"`
 	CategoryCustomFieldTypes       []CategoryCustomFieldTypes       `json:"CategoryCustomFieldTypes,omitempty"`
 	TicketCategoryCustomFieldTypes []TicketCategoryCustomFieldTypes `json:"TicketCategoryCustomFieldTypes,omitempty"`
@@ -60,16 +60,16 @@ type CategoryCustomFieldTypes struct {
 	Scope                    string `json:"Scope,omitempty"`
 	Name                     string `json:"Name,omitempty"`
 	OwnerAppID               string `json:"OwnerAppId,omitempty"`
-	EditorType               string `json:"EditorType,omitempty"`
+	EditorType               int    `json:"EditorType,omitempty"`
 	Options                  string `json:"Options,omitempty"`
-	HasSensitiveInformation  string `json:"HasSensitiveInformation,omitempty"`
+	HasSensitiveInformation  bool   `json:"HasSensitiveInformation,omitempty"`
 	Configuration            string `json:"Configuration,omitempty"`
-	IsRequired               string `json:"IsRequired,omitempty"`
-	IsReadOnly               string `json:"IsReadOnly,omitempty"`
-	IsHidden                 string `json:"IsHidden,omitempty"`
-	MaxNumberOfInstances     string `json:"MaxNumberOfInstances,omitempty"`
-	DefaultSiteRowVisibility string `json:"DefaultSiteRowVisibility,omitempty"`
-	DisplayOrder             string `json:"DisplayOrder,omitempty"`
+	IsRequired               bool   `json:"IsRequired,omitempty"`
+	IsReadOnly               bool   `json:"IsReadOnly,omitempty"`
+	IsHidden                 bool   `json:"IsHidden,omitempty"`
+	MaxNumberOfInstances     int    `json:"MaxNumberOfInstances,omitempty"`
+	DefaultSiteRowVisibility bool   `json:"DefaultSiteRowVisibility,omitempty"`
+	DisplayOrder             int    `json:"DisplayOrder,omitempty"`
 }
 
 type TicketCategoryCustomFieldTypes struct {

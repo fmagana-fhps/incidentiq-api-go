@@ -2,9 +2,21 @@ package models
 
 import "time"
 
-type ItemResponse struct {
+type ItemResponse[T any] struct {
+	Item          T          `json:"Item,omitempty"`
+	UserToken     string     `json:"UserToken,omitempty"`
+	RequestDate   time.Time  `json:"RequestDate,omitempty"`
+	ExecutionTime float64    `json:"ExecutionTime,omitempty"`
+	StatusCode    int        `json:"StatusCode,omitempty"`
+	ServerName    string     `json:"ServerName,omitempty"`
+	ProcessID     int        `json:"ProcessId,omitempty"`
+	OperationID   string     `json:"OperationId.omitempty"`
+	Properties    Properties `json:"Properties,omitempty"`
+}
+
+type ItemsResponse[T any] struct {
 	ItemCount     int        `json:"ItemCount,omitempty"`
-	Items         []Item     `json:"Items,omitempty"`
+	Items         []T        `json:"Items,omitempty"`
 	Paging        Paging     `json:"Paging,omitempty"`
 	UserToken     string     `json:"UserToken,omitempty"`
 	RequestDate   time.Time  `json:"RequestDate,omitempty"`
@@ -12,6 +24,7 @@ type ItemResponse struct {
 	StatusCode    int        `json:"StatusCode,omitempty"`
 	ServerName    string     `json:"ServerName,omitempty"`
 	ProcessID     int        `json:"ProcessId,omitempty"`
+	OperationID   string     `json:"OperationId.omitempty"`
 	Properties    Properties `json:"Properties,omitempty"`
 	Metadata      Metadata   `json:"Metadata,omitempty"`
 }
