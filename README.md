@@ -6,7 +6,8 @@ to make it easier to build applications around the API whilst going around all
 the extra steps.
 
 I will be starting with Assets and them making my way around based on my needs 
-for work.
+for work. I don't know if I will do every single endpoint as some of them are
+redundant. View [Endpoint.md](https://github.com/fmagana-fhps/incidentiq-api-go/Endpoint.md) to see a list of all the endpoints.
 
 Endpoints TODO
 - Admin
