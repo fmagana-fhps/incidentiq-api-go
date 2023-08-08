@@ -3,14 +3,21 @@ package iiq
 import (
 	"testing"
 
-	"github.com/fmagana-fhps/incidentiq-api-go/models"
+	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
 func TestClientFail(t *testing.T) {
-	model, _ := do[models.ItemResponse[models.Asset]](Site{"fhps", "token", "token"},
-		Options[models.ItemResponse[models.Asset]]{Method: "GET", Endpoint: ""})
+	// model, _ := do[models.ItemResponse[models.Asset]](Client{"fhps", "token", "token"},
+	// 	Options[models.ItemResponse[models.Asset]]{Method: "GET", Endpoint: ""})
 
-	if model.StatusCode != 500 {
-		t.Errorf("check = %d; want 500", model.StatusCode)
+	client, _ := NewClient(&Options{
+		Domain: "fhps",
+		Token:  "token",
+	})
+
+	model, _ := client.do("GET", "/", nil, &m.ItemResponse[m.Asset]{})
+
+	if model.(*m.ItemResponse[m.Asset]).StatusCode != 500 {
+		t.Errorf("check = %d; want 500", model.(*m.ItemResponse[m.Asset]).StatusCode)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fmagana-fhps/incidentiq-api-go/models"
+	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
 // {
@@ -20,37 +20,28 @@ import (
 // 	"FilterByViewPermission": true
 // }
 
-// # Python code for get most pages
-// 		url = "https://" + config.IIQ_INSTANCE + "/api/v1.0/assets/?$p=" + str(
-// 		page) + "&$s=" + config.PAGE_SIZE + "&$d=Ascending&$o=AssetTag"
-// # Cause an exception if for some reason the API returns nothing
-// if response.json()['Paging']['PageSize'] <= 0:
-// 	print("ERROR NO ELEMENTS WERE RETURNED")
-// 	raise HTTPError("No elements were returned from a request")
-
-// return response
-
-// @staticmethod
-// def get_num_pages():
-// return Asset.get_data_request(0).json()['Paging']['PageCount']
-
-// @classmethod
-// def get_page(cls, page_number):
-// return super().get_page(page_number)
-
-func AssetById(site Site, id string) (models.Asset, error) {
-	model, err := get[models.ItemResponse[models.Asset]](site, fmt.Sprintf("/assets/%s", id))
-	return model.Item, err
+func (c *Client) AssetById(id string) (m.Asset, error) {
+	url := fmt.Sprintf("/assets/%s", id)
+	model, err := c.get(url, &m.ItemResponse[m.Asset]{})
+	return model.(m.ItemResponse[m.Asset]).Item, err
 }
 
-func AssetsByAssetTag(site Site, assetTags ...string) ([]models.Asset, error) {
+func (c *Client) AssetsByAssetTag(assetTags ...string) ([]m.Asset, error) {
 	joined := strings.Join(assetTags, "|")
-	model, err := get[models.ItemsResponse[models.Asset]](site, fmt.Sprintf("/assets/assettag/search/%s", joined))
-	return model.Items, err
+	url := fmt.Sprintf("/assets/assettag/search/%s", joined)
+	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
+	return model.(m.ItemsResponse[m.Asset]).Items, err
 }
 
-func AssetsBySerialNumber(site Site, serialNumber ...string) ([]models.Asset, error) {
+func (c *Client) AssetsBySerialNumber(serialNumber ...string) ([]m.Asset, error) {
 	joined := strings.Join(serialNumber, "|")
-	model, err := get[models.ItemsResponse[models.Asset]](site, fmt.Sprintf("/assets/serial/search/%s", joined))
-	return model.Items, err
+	url := fmt.Sprintf("/assets/serial/search/%s", joined)
+	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
+	return model.(m.ItemsResponse[m.Asset]).Items, err
+}
+
+func (c *Client) GetLinkedAssets(id string) ([]m.Asset, error) {
+	url := fmt.Sprintf("/assets/linked/to/%s", id)
+	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
+	return model.(m.ItemsResponse[m.Asset]).Items, err
 }

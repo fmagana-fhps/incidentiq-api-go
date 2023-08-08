@@ -1,62 +1,95 @@
 package iiq
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
-type Site struct {
-	Domain string
-	Id     string
-	Token  string
+type Client struct {
+	ctx  context.Context
+	opts *Options
 }
 
-type Options[T any] struct {
-	Method   string
-	Endpoint string
-	Response T
+type Options struct {
+	Domain     string
+	BaseURL    string
+	SiteId     string
+	Token      string
+	HTTPClient *http.Client
 }
 
-const url = "https://%s.incidentiq.com/api/v1.0%s"
+const DefaultBaseURL = "https://%s.incidentiq.com/api/v1.0%s"
 
-var client = &http.Client{Timeout: 10 * time.Second}
-
-// The request in the function uses the POST method but we do
-// not provide a body to show that we are not expecting changes
-// to the endpoint. It is how the API works *eye roll* '|' for bulk
-func do[T any](site Site, options Options[T]) (T, error) {
-	url := fmt.Sprintf(url, site.Domain, options.Endpoint)
-
-	request, err := http.NewRequest(options.Method, url, nil)
-	if err != nil {
-		return options.Response, err
+func NewClient(options *Options) (*Client, error) {
+	if options.Domain == "" {
+		return nil, errors.New("a domain has not been provided but is required")
 	}
 
-	request.Header.Add("SiteId", site.Id)
-	request.Header.Add("Authorization", "Bearer "+site.Token)
+	if options.HTTPClient == nil {
+		options.HTTPClient = &http.Client{Timeout: 10 * time.Second}
+	}
+
+	if options.BaseURL == "" {
+		options.BaseURL = DefaultBaseURL
+	}
+
+	client := &Client{
+		ctx:  context.Background(),
+		opts: options,
+	}
+
+	return client, nil
+}
+
+func (c *Client) request(method, url string, data io.Reader, respData interface{}) (interface{}, error) {
+	request, err := http.NewRequest(method, url, data)
+	if err != nil {
+		return nil, err
+	}
+
+	request.Header.Add("SiteId", c.opts.SiteId)
+	request.Header.Add("Authorization", "Bearer "+c.opts.Token)
 	request.Header.Add("Client", "ApiClient")
 
-	response, err := client.Do(request)
+	resp, err := c.opts.HTTPClient.Do(request)
 	if err != nil {
-		return options.Response, err
+		return nil, err
 	}
-	defer response.Body.Close()
+	defer resp.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return options.Response, err
+		return nil, err
 	}
 
-	return options.Response, json.Unmarshal(body, &options.Response)
+	return respData, json.Unmarshal(body, &respData)
 }
 
-func get[T any](site Site, endpoint string) (T, error) {
-	return do(site,
-		Options[T]{
-			Method:   http.MethodGet,
-			Endpoint: endpoint,
-		})
+func (c *Client) do(method, endpoint string, reqData, respData interface{}) (interface{}, error) {
+	url := fmt.Sprintf(c.opts.BaseURL, c.opts.Domain, endpoint)
+
+	if reqData != nil {
+		b, err := json.Marshal(reqData)
+		if err != nil {
+			return nil, err
+		}
+
+		return c.request(method, url, strings.NewReader(string(b)), respData)
+	}
+
+	return c.request(method, url, nil, respData)
+}
+
+func (c *Client) get(endpoint string, respData interface{}) (interface{}, error) {
+	return c.do(http.MethodGet, endpoint, nil, respData)
+}
+
+func (c *Client) post(endpoint string, reqData, respData interface{}) (interface{}, error) {
+	return c.do(http.MethodPost, endpoint, reqData, respData)
 }
