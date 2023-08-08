@@ -8,51 +8,51 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var SiteModel iiq.Site
+var client *iiq.Client
 
 func init() {
 	godotenv.Load(".env.local")
-	SiteModel = iiq.Site{
-		Id:     os.Getenv("SITEID"),
+	client, _ = iiq.NewClient(&iiq.Options{
+		SiteId: os.Getenv("SITEID"),
 		Token:  os.Getenv("TOKEN"),
 		Domain: os.Getenv("DOMAIN"),
-	}
+	})
 }
 
 func TestAssetById(t *testing.T) {
 	id := "4d2080b4-51dc-4b06-807b-21051c8e8fe7"
-	result, err := iiq.AssetById(SiteModel, id)
+	result, err := client.AssetById(id)
 	if err != nil {
 		t.Error(err)
 	}
 
 	if result.AssetID != id {
-		t.Errorf("AssetID = %s; want %s", result.AssetID, id)
+		t.Errorf("AssetID = %s; expected %s", result.AssetID, id)
 	}
 }
 
 func TestAssetByAssetTag(t *testing.T) {
 	assetTags := []string{"82888", "82889"}
-	result, err := iiq.AssetsByAssetTag(SiteModel, assetTags...)
+	result, err := client.AssetsByAssetTag(assetTags...)
 	if err != nil {
 		t.Error(err)
 	}
 	for i := range result {
 		if result[i].AssetTag != assetTags[i] {
-			t.Errorf("AssetTag = %s; want %s", result[i].AssetTag, assetTags[i])
+			t.Errorf("AssetTag = %s; expected %s", result[i].AssetTag, assetTags[i])
 		}
 	}
 }
 
 func TestAssetBySerialNumber(t *testing.T) {
 	serialNumbers := []string{"476NTQ3", "9MFPTQ3"}
-	result, err := iiq.AssetsBySerialNumber(SiteModel, serialNumbers...)
+	result, err := client.AssetsBySerialNumber(serialNumbers...)
 	if err != nil {
 		t.Error(err)
 	}
 	for i := range result {
 		if result[i].SerialNumber != serialNumbers[i] {
-			t.Errorf("SerialNumber = %s; want %s", result[i].SerialNumber, serialNumbers[i])
+			t.Errorf("SerialNumber = %s; expected %s", result[i].SerialNumber, serialNumbers[i])
 		}
 	}
 }
