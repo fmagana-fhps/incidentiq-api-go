@@ -35,8 +35,22 @@ type Paging struct {
 	PageSize  int `json:"PageSize,omitempty"`
 	PageIndex int `json:"PageIndex,omitempty"`
 }
+
+type BaseResponse struct {
+	UserToken     string     `json:"UserToken,omitempty"`
+	RequestDate   time.Time  `json:"RequestDate,omitempty"`
+	ExecutionTime float64    `json:"ExecutionTime,omitempty"`
+	StatusCode    int        `json:"StatusCode,omitempty"`
+	Message       string     `json:"Message,omitempty"`
+	ServerName    string     `json:"ServerName,omitempty"`
+	ProcessID     int        `json:"ProcessId,omitempty"`
+	OperationID   string     `json:"OperationId,omitempty"`
+	Properties    Properties `json:"Properties,omitempty"`
+}
+
 type Properties struct {
 }
+
 type Metadata struct {
 	QueryEngineSource string `json:"QueryEngineSource,omitempty"`
 }
