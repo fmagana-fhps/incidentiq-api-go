@@ -11,7 +11,7 @@ import (
 var client *iiq.Client
 
 func init() {
-	godotenv.Load(".env.local")
+	godotenv.Load("../.env.local")
 	client, _ = iiq.NewClient(&iiq.Options{
 		SiteId: os.Getenv("SITEID"),
 		Token:  os.Getenv("TOKEN"),

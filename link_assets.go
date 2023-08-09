@@ -29,5 +29,5 @@ func createBody(parentId string, childIds ...string) AssetLinks {
 func (c *Client) LinkAssets(parentId string, childIds ...string) (string, error) {
 	url := fmt.Sprintf("/assets/linked/to/%s", parentId)
 	res, err := c.post(url, createBody(parentId, childIds...), &m.BaseResponse{})
-	return res.(m.BaseResponse).Message, err
+	return res.(*m.BaseResponse).Message, err
 }

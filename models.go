@@ -8,6 +8,6 @@ import (
 
 func (c *Client) ModelById(id string) (m.Model, error) {
 	url := fmt.Sprintf("/models/%s", id)
-	model, err := c.get(url, m.ItemResponse[m.Model]{})
-	return model.(m.ItemResponse[m.Model]).Item, err
+	model, err := c.get(url, &m.ItemResponse[m.Model]{})
+	return model.(*m.ItemResponse[m.Model]).Item, err
 }
