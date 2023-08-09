@@ -57,6 +57,15 @@ func (c *Client) request(method, url string, data io.Reader, respData interface{
 	request.Header.Add("Authorization", "Bearer "+c.opts.Token)
 	request.Header.Add("Client", "ApiClient")
 
+	if data != nil {
+		request.Header.Set("Accept", "application/json, text/plain, */*")
+		request.Header.Add("Pragma", "no-cache")
+		request.Header.Add("Cache-Control", "no-cache")
+		request.Header.Add("Accept-Encoding", "gzip deflate, br")
+		request.Header.Add("Accept-Language", "en-US,en;q=0.9")
+		request.Header.Add("Content-Type", "application/json")
+	}
+
 	resp, err := c.opts.HTTPClient.Do(request)
 	if err != nil {
 		return nil, err
