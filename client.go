@@ -102,3 +102,7 @@ func (c *Client) get(endpoint string, respData interface{}) (interface{}, error)
 func (c *Client) post(endpoint string, reqData, respData interface{}) (interface{}, error) {
 	return c.do(http.MethodPost, endpoint, reqData, respData)
 }
+
+func (c *Client) delete(endpoint string, reqData, respData interface{}) (interface{}, error) {
+	return c.do(http.MethodDelete, endpoint, reqData, respData)
+}
