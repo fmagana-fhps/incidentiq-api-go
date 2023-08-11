@@ -26,9 +26,10 @@ func (c *Client) AssetById(id string) (m.Asset, error) {
 	return model.(*m.ItemResponse[m.Asset]).Item, err
 }
 
-func (c *Client) AssetsByAssetTag(assetTags ...string) ([]m.Asset, error) {
+func (c *Client) AssetsByAssetTag(params Parameters, assetTags ...string) ([]m.Asset, error) {
+	query := params.encode()
 	joined := strings.Join(assetTags, "|")
-	url := fmt.Sprintf("/assets/assettag/search/%s", joined)
+	url := fmt.Sprintf("/assets/assettag/search/%s?%s", joined, query)
 	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }
