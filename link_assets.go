@@ -6,19 +6,15 @@ import (
 	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
-type AssetLinks []struct {
-	ParentAssetID string `json:"ParentAssetId"`
-	ChildAssetID  string `json:"ChildAssetId"`
+type AssetLinks struct {
+	ChildAssetID string `json:"ChildAssetId"`
 }
 
-func createBody(parentId string, childIds ...string) AssetLinks {
-	links := AssetLinks{}
+func createBody(childIds []string) []AssetLinks {
+	links := []AssetLinks{}
 
 	for _, child := range childIds {
-		s := struct {
-			ParentAssetID string `json:"ParentAssetId"`
-			ChildAssetID  string `json:"ChildAssetId"`
-		}{parentId, child}
+		s := AssetLinks{child}
 
 		links = append(links, s)
 	}
@@ -28,6 +24,6 @@ func createBody(parentId string, childIds ...string) AssetLinks {
 
 func (c *Client) LinkAssets(parentId string, childIds ...string) (string, error) {
 	url := fmt.Sprintf("/assets/linked/to/%s", parentId)
-	res, err := c.post(url, createBody(parentId, childIds...), &m.BaseResponse{})
-	return res.(*m.BaseResponse).Message, err
+	res, err := c.post(url, createBody(childIds), &m.LinkResponse{})
+	return res.(*m.LinkResponse).Message, err
 }
