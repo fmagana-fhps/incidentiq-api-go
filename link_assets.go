@@ -30,6 +30,6 @@ func (c *Client) LinkAssets(parentId string, childIds ...string) (string, error)
 
 func (c *Client) UnlinkAssets(parentId string, childIds ...string) (string, error) {
 	url := fmt.Sprintf("/assets/linked/to/%s", parentId)
-	res, err := c.delete(url, createBody(parentId, childIds...), &m.BaseResponse{})
-	return res.(*m.BaseResponse).Message, err
+	res, err := c.delete(url, createBody(childIds), &m.LinkResponse{})
+	return res.(*m.LinkResponse).Message, err
 }
