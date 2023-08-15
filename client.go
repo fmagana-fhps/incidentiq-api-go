@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -22,6 +23,40 @@ type Options struct {
 	SiteId     string
 	Token      string
 	HTTPClient *http.Client
+}
+
+type Parameters struct {
+	PageSize   int
+	PageNumber int
+	Filter     string
+	OrderBy    string
+	Display    string
+}
+
+func (p Parameters) encode() string {
+	v := url.Values{}
+
+	if p.PageSize != 0 {
+		v.Add("$s", fmt.Sprintf("%d", p.PageSize))
+	}
+
+	if p.PageNumber != 0 {
+		v.Add("$p", fmt.Sprintf("%d", p.PageNumber))
+	}
+
+	if p.OrderBy != "" {
+		v.Add("$o", p.OrderBy)
+	}
+
+	if p.Display != "" {
+		v.Add("$d", p.Display)
+	}
+
+	if p.Filter != "" {
+		v.Add("$filter", p.Filter)
+	}
+
+	return v.Encode()
 }
 
 const DefaultBaseURL = "https://%s.incidentiq.com/api/v1.0%s"
