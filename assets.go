@@ -34,15 +34,17 @@ func (c *Client) AssetsByAssetTag(params Parameters, assetTags ...string) ([]m.A
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }
 
-func (c *Client) AssetsBySerialNumber(serialNumber ...string) ([]m.Asset, error) {
-	joined := strings.Join(serialNumber, "|")
-	url := fmt.Sprintf("/assets/serial/search/%s", joined)
+func (c *Client) AssetsBySerialNumber(params Parameters, serialNumbers ...string) ([]m.Asset, error) {
+	query := params.encode()
+	joined := strings.Join(serialNumbers, "|")
+	url := fmt.Sprintf("/assets/serial/search/%s?%s", joined, query)
 	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }
 
-func (c *Client) GetLinkedAssets(id string) ([]m.Asset, error) {
-	url := fmt.Sprintf("/assets/linked/to/%s", id)
+func (c *Client) GetLinkedAssets(params Parameters, id string) ([]m.Asset, error) {
+	query := params.encode()
+	url := fmt.Sprintf("/assets/linked/to/%s?%s", id, query)
 	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }

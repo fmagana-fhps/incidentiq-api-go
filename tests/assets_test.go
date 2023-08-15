@@ -52,7 +52,9 @@ func TestAssetByAssetTag(t *testing.T) {
 
 func TestAssetBySerialNumber(t *testing.T) {
 	serialNumbers := []string{"476NTQ3", "9MFPTQ3"}
-	result, err := client.AssetsBySerialNumber(serialNumbers...)
+
+	params := iiq.Parameters{PageSize: len(serialNumbers)}
+	result, err := client.AssetsBySerialNumber(params, serialNumbers...)
 	if err != nil {
 		t.Error(err)
 	}
