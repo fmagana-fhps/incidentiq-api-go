@@ -26,11 +26,11 @@ type Options struct {
 }
 
 type Parameters struct {
-	PageSize   int
-	PageNumber int
-	Filter     string
-	OrderBy    string
-	Display    string
+	PageSize  int
+	PageIndex int
+	Filter    string
+	OrderBy   string
+	Display   string
 }
 
 func (p Parameters) encode() string {
@@ -40,8 +40,8 @@ func (p Parameters) encode() string {
 		v.Add("$s", fmt.Sprintf("%d", p.PageSize))
 	}
 
-	if p.PageNumber != 0 {
-		v.Add("$p", fmt.Sprintf("%d", p.PageNumber))
+	if p.PageIndex != 0 {
+		v.Add("$p", fmt.Sprintf("%d", p.PageIndex))
 	}
 
 	if p.OrderBy != "" {
