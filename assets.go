@@ -31,14 +31,14 @@ func (c *Client) AssetsBySerialNumber(params Parameters, serialNumbers ...string
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }
 
-func (c *Client) GetLinkedAssets(params Parameters, id string) ([]m.Asset, error) {
+func (c *Client) LinkedAssets(params Parameters, id string) ([]m.Asset, error) {
 	query := params.encode()
 	url := fmt.Sprintf("/assets/linked/to/%s?%s", id, query)
 	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }
 
-func (c *Client) GetAllAssets(params Parameters, data interface{}) ([]m.Asset, error) {
+func (c *Client) AllAssets(params Parameters, data interface{}) ([]m.Asset, error) {
 	query := params.encode()
 	url := fmt.Sprintf("/assets/?%s", query)
 	model, err := c.post(url, data, &m.ItemsResponse[m.Asset]{})

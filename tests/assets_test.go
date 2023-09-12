@@ -87,7 +87,7 @@ func TestAllAssets(t *testing.T) {
 		},
 	}
 
-	result, err := client.GetAllAssets(params, data)
+	result, err := client.AllAssets(params, data)
 	if err != nil {
 		t.Error(err)
 	}
