@@ -44,3 +44,9 @@ type Properties struct {
 type Metadata struct {
 	QueryEngineSource string `json:"QueryEngineSource,omitempty"`
 }
+
+type AssetVerificationResponse struct {
+	AssetVerification AssetVerification `json:"Item"`
+	Id                int               `json:"Id"`
+	Uid               string            `json:"Uid"`
+}
