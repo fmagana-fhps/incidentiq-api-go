@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	iiq "github.com/fmagana-fhps/incidentiq-api-go"
+	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 	"github.com/joho/godotenv"
 )
 
@@ -62,5 +63,36 @@ func TestAssetBySerialNumber(t *testing.T) {
 		if result[i].SerialNumber != serialNumbers[i] {
 			t.Errorf("SerialNumber = %s; expected %s", result[i].SerialNumber, serialNumbers[i])
 		}
+	}
+}
+
+func TestAllAssets(t *testing.T) {
+	params := iiq.Parameters{
+		Filter:  "CategoryId eq '[36c6be98-4f39-e611-bf3b-005056bb000e]'",
+		OrderBy: "AssetTag",
+	}
+
+	data := m.FilterBody{
+		OnlyShowDeleted:        false,
+		FilterByViewPermission: true,
+		Filters: []m.Filter{
+			{
+				Facet: "Manufacturer",
+				ID:    "518000c0-4dff-e511-a789-005056bb000e",
+			},
+			{
+				Facet: "Location",
+				ID:    "ca2c34ac-7f5f-481b-b563-a53f90165444",
+			},
+		},
+	}
+
+	result, err := client.GetAllAssets(params, data)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result[0].AssetTag != "200000" {
+		t.Errorf("Length of returned assets = %s, expected %s", result[0].AssetTag, "20000")
 	}
 }

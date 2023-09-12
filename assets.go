@@ -9,17 +9,6 @@ import (
 	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
-// {
-// 	"OnlyShowDeleted": false,
-// 	"Filters": [
-// 	  {
-// 		"Facet": "AssetType",
-// 		"Id": "2a1561e5-34ff-4fcf-87de-2a146f0e1c01"
-// 	  }
-// 	],
-// 	"FilterByViewPermission": true
-// }
-
 func (c *Client) AssetById(id string) (m.Asset, error) {
 	url := fmt.Sprintf("/assets/%s", id)
 	model, err := c.get(url, &m.ItemResponse[m.Asset]{})
@@ -46,5 +35,12 @@ func (c *Client) GetLinkedAssets(params Parameters, id string) ([]m.Asset, error
 	query := params.encode()
 	url := fmt.Sprintf("/assets/linked/to/%s?%s", id, query)
 	model, err := c.get(url, &m.ItemsResponse[m.Asset]{})
+	return model.(*m.ItemsResponse[m.Asset]).Items, err
+}
+
+func (c *Client) GetAllAssets(params Parameters, data interface{}) ([]m.Asset, error) {
+	query := params.encode()
+	url := fmt.Sprintf("/assets/?%s", query)
+	model, err := c.post(url, data, &m.ItemsResponse[m.Asset]{})
 	return model.(*m.ItemsResponse[m.Asset]).Items, err
 }

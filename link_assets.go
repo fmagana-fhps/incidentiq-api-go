@@ -6,15 +6,13 @@ import (
 	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
-type AssetLinks struct {
-	ChildAssetID string `json:"ChildAssetId"`
-}
-
-func createBody(childIds []string) []AssetLinks {
-	links := []AssetLinks{}
+func createBody(childIds []string) []m.AssetLinks {
+	links := []m.AssetLinks{}
 
 	for _, child := range childIds {
-		s := AssetLinks{child}
+		s := m.AssetLinks{
+			ChildAssetID: child,
+		}
 
 		links = append(links, s)
 	}
