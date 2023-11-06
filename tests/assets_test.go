@@ -27,8 +27,9 @@ func TestAssetById(t *testing.T) {
 		t.Error(err)
 	}
 
-	if result.AssetID != id {
-		t.Errorf("AssetID = %s; expected %s", result.AssetID, id)
+	asset := result.Body.Item
+	if asset.AssetID != id {
+		t.Errorf("AssetID = %s; expected %s", asset.AssetID, id)
 	}
 }
 
@@ -44,9 +45,10 @@ func TestAssetByAssetTag(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	assets := result.Body.Items
 	for i := 0; i < len(assetTags); i++ {
-		if result[i].AssetTag != assetTags[i] {
-			t.Errorf("AssetTag = %s; expected %s", result[i].AssetTag, assetTags[i])
+		if assets[i].AssetTag != assetTags[i] {
+			t.Errorf("AssetTag = %s; expected %s", assets[i].AssetTag, assetTags[i])
 		}
 	}
 }
@@ -59,9 +61,10 @@ func TestAssetBySerialNumber(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	for i := range result {
-		if result[i].SerialNumber != serialNumbers[i] {
-			t.Errorf("SerialNumber = %s; expected %s", result[i].SerialNumber, serialNumbers[i])
+	assets := result.Body.Items
+	for i := range assets {
+		if assets[i].SerialNumber != serialNumbers[i] {
+			t.Errorf("SerialNumber = %s; expected %s", assets[i].SerialNumber, serialNumbers[i])
 		}
 	}
 }
@@ -92,7 +95,8 @@ func TestAllAssets(t *testing.T) {
 		t.Error(err)
 	}
 
-	if result[0].AssetTag != "200000" {
-		t.Errorf("Length of returned assets = %s, expected %s", result[0].AssetTag, "20000")
+	assets := result.Body.Items
+	if assets[0].AssetTag != "200001" {
+		t.Errorf("Length of returned assets = %s, expected %s", assets[0].AssetTag, "20000")
 	}
 }

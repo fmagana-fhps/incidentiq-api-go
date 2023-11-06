@@ -20,14 +20,24 @@ func createBody(childIds []string) []m.AssetLinks {
 	return links
 }
 
-func (c *Client) LinkAssets(parentId string, childIds ...string) (string, error) {
+func (c *Client) LinkAssets(parentId string, childIds ...string) (m.Response[m.LinkResponse], error) {
 	url := fmt.Sprintf("/assets/linked/to/%s", parentId)
-	res, err := c.post(url, createBody(childIds), &m.LinkResponse{})
-	return res.(*m.LinkResponse).Message, err
+	resp, err := c.post(url, createBody(childIds), &m.LinkResponse{})
+	if err != nil {
+		return m.Response[m.LinkResponse]{}, err
+	}
+
+	model := convertBody(resp, m.LinkResponse{})
+	return model, err
 }
 
-func (c *Client) UnlinkAssets(parentId string, childIds ...string) (string, error) {
+func (c *Client) UnlinkAssets(parentId string, childIds ...string) (m.Response[m.LinkResponse], error) {
 	url := fmt.Sprintf("/assets/linked/to/%s", parentId)
-	res, err := c.delete(url, createBody(childIds), &m.LinkResponse{})
-	return res.(*m.LinkResponse).Message, err
+	resp, err := c.delete(url, createBody(childIds), &m.LinkResponse{})
+	if err != nil {
+		return m.Response[m.LinkResponse]{}, err
+	}
+
+	model := convertBody(resp, m.LinkResponse{})
+	return model, err
 }

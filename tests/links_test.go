@@ -10,7 +10,7 @@ func TestLinkAssets(t *testing.T) {
 		t.Error(err)
 	}
 
-	if result != "Assets successfully linked" {
-		t.Errorf("Link message = '%s'; expected 'Assets successfully linked'", result)
+	if result.Body.Message != "Assets successfully linked" {
+		t.Errorf("Link message = '%s'; expected 'Assets successfully linked'", result.Body.Message)
 	}
 }

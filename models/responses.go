@@ -1,8 +1,17 @@
 package models
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
-type BaseResponse struct {
+type Response[T any] struct {
+	StatusCode int
+	Header     http.Header
+	Body       T
+}
+
+type BodyResponse struct {
 	UserToken     string     `json:"UserToken"`
 	RequestDate   time.Time  `json:"RequestDate"`
 	ExecutionTime float64    `json:"ExecutionTime"`
@@ -14,12 +23,12 @@ type BaseResponse struct {
 }
 
 type ItemResponse[T any] struct {
-	BaseResponse
+	BodyResponse
 	Item T `json:"Item"`
 }
 
 type ItemsResponse[T any] struct {
-	BaseResponse
+	BodyResponse
 	ItemCount int      `json:"ItemCount"`
 	Items     []T      `json:"Items"`
 	Paging    Paging   `json:"Paging"`
@@ -34,7 +43,7 @@ type Paging struct {
 }
 
 type LinkResponse struct {
-	BaseResponse
+	BodyResponse
 	Message string `json:"Message"`
 }
 

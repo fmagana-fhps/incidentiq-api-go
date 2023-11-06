@@ -1,6 +1,7 @@
 package iiq
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,8 +9,9 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
+
+	m "github.com/fmagana-fhps/incidentiq-api-go/models"
 )
 
 type Client struct {
@@ -82,7 +84,7 @@ func NewClient(options *Options) (*Client, error) {
 	return client, nil
 }
 
-func (c *Client) request(method, url string, data io.Reader, respData interface{}) (interface{}, error) {
+func (c *Client) request(method, url string, data io.Reader, respData interface{}) (*m.Response[any], error) {
 	request, err := http.NewRequest(method, url, data)
 	if err != nil {
 		return nil, err
@@ -107,15 +109,21 @@ func (c *Client) request(method, url string, data io.Reader, respData interface{
 	}
 	defer resp.Body.Close()
 
+	response := &m.Response[any]{
+		Header:     resp.Header.Clone(),
+		StatusCode: resp.StatusCode,
+		Body:       respData,
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return respData, json.Unmarshal(body, &respData)
+	return response, json.Unmarshal(body, &response.Body)
 }
 
-func (c *Client) do(method, endpoint string, reqData, respData interface{}) (interface{}, error) {
+func (c *Client) do(method, endpoint string, reqData, respData interface{}) (*m.Response[any], error) {
 	url := fmt.Sprintf(c.opts.BaseURL, c.opts.Domain, endpoint)
 
 	if reqData != nil {
@@ -124,20 +132,33 @@ func (c *Client) do(method, endpoint string, reqData, respData interface{}) (int
 			return nil, err
 		}
 
-		return c.request(method, url, strings.NewReader(string(b)), respData)
+		return c.request(method, url, bytes.NewReader(b), respData)
 	}
 
 	return c.request(method, url, nil, respData)
 }
 
-func (c *Client) get(endpoint string, respData interface{}) (interface{}, error) {
+func (c *Client) get(endpoint string, respData interface{}) (*m.Response[any], error) {
 	return c.do(http.MethodGet, endpoint, nil, respData)
 }
 
-func (c *Client) post(endpoint string, reqData, respData interface{}) (interface{}, error) {
+func (c *Client) post(endpoint string, reqData, respData interface{}) (*m.Response[any], error) {
 	return c.do(http.MethodPost, endpoint, reqData, respData)
 }
 
-func (c *Client) delete(endpoint string, reqData, respData interface{}) (interface{}, error) {
+func (c *Client) delete(endpoint string, reqData, respData interface{}) (*m.Response[any], error) {
 	return c.do(http.MethodDelete, endpoint, reqData, respData)
+}
+
+func convertBody[T any](resp *m.Response[any], newResponse T) m.Response[T] {
+	body, ok := resp.Body.(*T)
+	if !ok {
+		panic("unexpected type during conversion")
+	}
+
+	return m.Response[T]{
+		StatusCode: resp.StatusCode,
+		Header:     resp.Header,
+		Body:       *body,
+	}
 }

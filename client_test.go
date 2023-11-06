@@ -17,7 +17,7 @@ func TestClientFail(t *testing.T) {
 
 	model, _ := client.do("GET", "/", nil, &m.ItemResponse[m.Asset]{})
 
-	if model.(*m.ItemResponse[m.Asset]).StatusCode != 500 {
-		t.Errorf("check = %d; want 500", model.(*m.ItemResponse[m.Asset]).StatusCode)
+	if model.StatusCode != 500 {
+		t.Errorf("check = %d; want 500", model.StatusCode)
 	}
 }
