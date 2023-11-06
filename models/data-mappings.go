@@ -19,6 +19,14 @@ type DataMappings struct {
 	LastInventoryDate      LastInventoryDateMappings      `json:"LastInventoryDate,omitempty"`
 	Notes                  NotesMappings                  `json:"Notes,omitempty"`
 	Status                 StatusMappings                 `json:"Status,omitempty"`
+	Name                   NameMappings                   `json:"Name,omitempty"`
+	Email                  EmailMappings                  `json:"Email,omitempty"`
+	Username               UsernameMappings               `json:"Username,omitempty"`
+	SchoolIDNumber         SchoolIDNumberMappings         `json:"SchoolIdNumber,omitempty"`
+	Location               LocationMappings               `json:"Location,omitempty"`
+	Role                   RoleMappings                   `json:"Role,omitempty"`
+	Grade                  GradeMappings                  `json:"Grade,omitempty"`
+	AuthenticatedBy        AuthenticatedByMappings        `json:"AuthenticatedBy,omitempty"`
 	Lookups                []LookupsMappings              `json:"Lookups,omitempty"`
 }
 
@@ -76,8 +84,40 @@ type NotesMappings struct {
 type StatusMappings struct {
 	AppID string `json:"AppId,omitempty"`
 }
+type NameMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type EmailMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type UsernameMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type SchoolIDNumberMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type LocationMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type RoleMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type GradeMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
+type AuthenticatedByMappings struct {
+	AppID string `json:"AppId,omitempty"`
+}
 type LookupsMappings struct {
 	Key   string `json:"Key,omitempty"`
 	AppID string `json:"AppId,omitempty"`
 	Value string `json:"Value,omitempty"`
+}
+
+type CustomFieldValues struct {
+	AssetID           string `json:"AssetId,omitempty"`
+	CustomFieldTypeID string `json:"CustomFieldTypeId,omitempty"`
+	EditorTypeID      int    `json:"EditorTypeId,omitempty"`
+	Value             string `json:"Value,omitempty"`
+	IsHidden          bool   `json:"IsHidden,omitempty"`
 }

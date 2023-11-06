@@ -109,10 +109,6 @@ type Owner struct {
 	SchoolIDNumber string `json:"SchoolIdNumber,omitempty"`
 }
 
-type CustomFieldValues struct {
-	AssetID string `json:"AssetId,omitempty"`
-}
-
 type FundingSource struct {
 	SiteID             string `json:"SiteId,omitempty"`
 	Scope              string `json:"Scope,omitempty"`

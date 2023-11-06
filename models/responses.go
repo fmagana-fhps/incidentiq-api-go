@@ -20,6 +20,8 @@ type BodyResponse struct {
 	ProcessID     int        `json:"ProcessId"`
 	OperationID   string     `json:"OperationId"`
 	Properties    Properties `json:"Properties,omitempty"`
+	Uid           string     `json:"Uid,omitempty"`
+	Id            int        `json:"Id,omitempty"`
 }
 
 type ItemResponse[T any] struct {
