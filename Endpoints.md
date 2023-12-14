@@ -1548,7 +1548,7 @@ GET /img/{FileId}
 - POST /tickets/{TicketId}/subject
 - POST /tickets/support/{RawFacet}/{RawFacetId}/{RawSchema}
 - GET /tickets/{TicketId}/kb-articles
-- POST/tickets/new
+- POST /tickets/new
 - POST /tickets/bulk/set-issue
 - POST /tickets/{TicketId}/mark-sensitive
 - POST /tickets/{TicketId}/followers/user/{UserId}
